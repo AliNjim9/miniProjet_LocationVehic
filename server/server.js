@@ -33,7 +33,6 @@ app.use('/localite',localiteRoutes);
 
 
 const CONNECTION_URL='mongodb+srv://ali:ali@cluster0.atffd.mongodb.net/myDB?retryWrites=true&w=majority';
-//const CONNECTION_URL = 'mongodb+srv://islem:islem@cluster0.lxjee.mongodb.net/FirstProject';
 
 mongoose.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => app.listen(port,'0.0.0.0', () => console.log(`Server Running on Port: http://localhost:${port}`)))

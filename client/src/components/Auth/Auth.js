@@ -52,8 +52,8 @@ export const Auth =() =>{
                                     <Input name="nomClient" label="Nom" handleChange={handleChange} autofocus half />
                                     <Input name="adresseClient" label="Adresse" handleChange={handleChange} half />
                                 
-                                <Input name="telClient" label="Telephone" handleChange={handleChange} half />
-                                <Input name="mailClient" label="Email" handleChange={handleChange} half />
+                                <Input name="telClient" label="Telephone" type="number" handleChange={handleChange} half />
+                                <Input name="mailClient" label="Email" type="email" handleChange={handleChange} half />
                                 </>
                             )
                         }

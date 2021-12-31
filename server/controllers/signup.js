@@ -13,7 +13,6 @@ export const signup = async(req,res) => {
         if(existingCompte) return res.status(400).json({message : "Compte already exists ."});
 
         const hashedPassword = await bcrypt.hash(password,12);
-        bcrypt.
         console.log(nomClient);
         console.log(mailClient);
         const newCompte = await Compte.create({ login,password:hashedPassword});

@@ -1,5 +1,6 @@
 import Client from  '../models/Client.js';
 import Compte from  '../models/Compte.js';
+import bcrypt from 'bcryptjs';
 
 import mongoose from 'mongoose';
 
@@ -52,15 +53,25 @@ export const createClient = async (req, res) => {
 
 export const updateClient = async (req, res) => {
     const { id } = req.params;
-    const { nomclient, adresseclient, telclient, mailclient, login, password} = req.body;
-    
+    const { nomclient, adresseclient, telclient, mailclient, login, newpwd} = req.body;
+    console.log("mail :"+mailclient);
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No client with id: ${id}`);
+    if(nomclient!="" && adresseclient!="" && telclient!="" && mailclient!=""){
+        const updatedClient = { nomclient:nomclient, adresseclient:adresseclient,telclient:telclient, mailclient:mailclient };
 
-    const updatedClient = { creator, title, message, tags, selectedFile, _id: id };
-
-    await Client.findByIdAndUpdate(id, updatedClient, { new: true });
-
-    res.json(updatedClient);
+        await Client.findByIdAndUpdate(id, updatedClient, { new: true });
+        if(login!="" || newpwd!=""){
+            const hashednewpwd=await bcrypt.hash(newpwd,12);
+            console.log(hashednewpwd);
+            const updatedCompte = { login:login, password:hashednewpwd };
+            const compteID =await Client.findById(id);
+            console.log(compteID["compte"]);
+            await Compte.findByIdAndUpdate(compteID["compte"], updatedCompte, { new: true });
+            res.json({updatedCompte,updatedClient});
+        }else{
+            res.json(updatedClient);
+        }
+    }
 }
 
 export const deleteClient = async (req, res) => {

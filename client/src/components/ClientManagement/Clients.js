@@ -4,6 +4,8 @@ import { useDispatch,useSelector}  from "react-redux";
 import {getClients,deleteClient,updateClient} from "../../actions/client";
 import { DataGrid} from '@mui/x-data-grid';
 import Alert from '@mui/material/Alert';
+import validator from 'validator';
+
 
 export const Clients =()=>{
   const user = JSON.parse(localStorage.getItem('profile'));
@@ -12,7 +14,7 @@ export const Clients =()=>{
     const columns = [
       { field: 'id', headerName: 'ID', width: 190 ,editable:false,autoIncrement: true,hide: true},
       { field: 'login', headerName: 'Login', width: 150 ,editable:true},
-      { field: 'nomclient', headerName: 'Nom ', width: 200 ,editable:false},
+      { field: 'nomclient', headerName: 'Nom ', width: 200 ,editable:true},
       { field: 'adresseclient', headerName: 'Adresse ', width: 200 ,editable:true},
       { field: 'telclient', headerName: 'Telephone ', width: 150 ,editable:true},
       { field: 'mailclient', headerName: 'Mail',width: 150,editable:true},
@@ -48,8 +50,10 @@ export const Clients =()=>{
       },[setTable,tableData]);*/
     }
     const onSave=()=>{
-      //dispatch(updateReservation(selectionModel,reservationData,setMessage));
+      dispatch(updateClient(selectionModel,clientData));
       //dispatch(getReservations());
+      console.log(clientData);
+      console.log(selectionModel);
     }
 
     const onClick=()=>{
@@ -80,14 +84,34 @@ export const Clients =()=>{
       const editedIds = Object.keys(model);
       if(editedIds.length > 0){
         let values = Object.values(model[editedIds[0]]);
+        
+        console.log(values);
         setClientData({...clientData,
           login: values[0].value,
           nomclient : values[1].value,
           adresseclient: values[2].value,
           telclient: values[3].value,
           mailclient: values[4].value,
-          newpwd: values[5].value,
+          newpwd: values[5].value||'',
           })
+          if(validator.isEmail(values[4].value)){
+          setClientData({...clientData,
+            login: values[0].value,
+            nomclient : values[1].value,
+            adresseclient: values[2].value,
+            telclient: values[3].value,
+            mailclient: values[4].value,
+            newpwd: values[5].value||'',
+            })
+          }else{
+            setClientData({...clientData,
+              login: values[0].value,
+              nomclient : values[1].value,
+              adresseclient: values[2].value,
+              telclient: values[3].value,
+              newpwd: values[5].value||'',
+              })
+          }
       }
     }
   },[selectionModel,dispatch]);
